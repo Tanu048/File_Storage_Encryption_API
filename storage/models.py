@@ -24,6 +24,8 @@ class Users(Base):
     id = Column(String, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
     role = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    password = Column(String, nullable=False)
     date_created = Column(DateTime(), server_default=func.now())
 
     file = relationship("Files", back_populates="user")

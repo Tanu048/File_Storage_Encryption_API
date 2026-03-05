@@ -11,12 +11,18 @@ class PydanticFiles(BaseModel):
     mime_type: str
     created_at:datetime
     update_at:datetime
+    
+
+class Token(BaseModel):
+    access_token:str
+    token_type: str
 
 class PydanticUsers(BaseModel):
     id: str
     name:str
     role:str
     date_crated:datetime
+    password:str
 
 class PydanticPermissions(BaseModel):
     id:UUID
