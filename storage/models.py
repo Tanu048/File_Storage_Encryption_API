@@ -6,8 +6,8 @@ Base = declarative_base()
 
 class Files(Base):
     __tablename__ = "files"
-    id = Column(UUID, primary_key=True, nullable=False)
-    owner_id = Column(String, ForeignKey("users.id"), nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     file_name = Column(String, nullable=False)
     size = Column(Integer, nullable=False)
     encrypted_path = Column(String)  # - path to encrypted file on disk
@@ -21,12 +21,13 @@ class Files(Base):
 
 class Users(Base):
     __tablename__ = "users"
-    id = Column(String, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     name = Column(String, nullable=False)
     role = Column(String, nullable=False)
-    email = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False, index=True)
+    username = Column(String, unique=True, nullable=False, index=True)
     password = Column(String, nullable=False)
-    date_created = Column(DateTime(), server_default=func.now())
+    date_created = Column(DateTime(timezone=True), server_default=func.now())
 
     file = relationship("Files", back_populates="user")
     permission = relationship("Permissions", back_populates="user")
@@ -34,10 +35,10 @@ class Users(Base):
 
 class Permissions(Base):
     __tablename__ = "permissions"
-    permission_id = Column(UUID, primary_key=True, nullable=False)
+    permission_id = Column(UUID, primary_key=True, nullable=False, index=True)
     permission_type = Column(String, nullable=False)
-    file_id = Column(UUID, ForeignKey("files.id"), nullable=False)
-    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    file_id = Column(Integer, ForeignKey("files.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     file = relationship("Files", back_populates="permission")
     user = relationship("Users", back_populates="permission")

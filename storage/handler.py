@@ -1,27 +1,23 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from storage.models import Files, Users, Permissions, Base
+from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
 
-engine = create_engine(
-    "postgresql://postgres:postgresdatabase2026@localhost:5432/file_encryption_database"
-)
+from storage.models import Files, Users, Base
 
-local_session = Session(bind=engine)
+load_dotenv()
 
-class DBHandler:
+engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 
-    def get_user_data():
-        data = local_session.query(Users.id,Users.name,Users.role).all()
-        return data
+local_session = sessionmaker(bind=engine)
 
-    def add_user(user:Users):
-        Base.metadata.create_all(engine)
-        local_session.add(user)
-        local_session.commit()
+Base.metadata.create_all(engine)
 
-    def del_user(user_id:str):
-        user=local_session.query(Users).filter(Users.id==user_id).delete()
-        if user == 0:
-            return False        
-        local_session.commit()
-        return True
+
+def get_db():
+    db = local_session()
+    try:
+        yield db
+        
+    finally:
+        db.close()

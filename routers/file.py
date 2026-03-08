@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import HTTPException, status
 
-from api.models import PydanticFiles
+from api.schema import PydanticFiles
 from storage.models import Files
 
 router = APIRouter(prefix="/file")

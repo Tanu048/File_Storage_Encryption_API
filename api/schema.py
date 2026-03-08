@@ -18,10 +18,21 @@ class Token(BaseModel):
     token_type: str
 
 class PydanticUsers(BaseModel):
+    name:str
+    email:str
+    username:str
+    role:str
+    password:str
+
+class UserResponse(BaseModel):
     id: str
+    username:str
     name:str
     role:str
-    date_crated:datetime
+    date_created:datetime
+
+class UserLogin(BaseModel):
+    username:str
     password:str
 
 class PydanticPermissions(BaseModel):
